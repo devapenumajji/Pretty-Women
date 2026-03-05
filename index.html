@@ -1,1 +1,1691 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>Pretty Women Beauty Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ========== THEME VARIABLES ========== */
+[data-theme="light"] {
+  --bg: #FFF5F0; --bg2: #FFFBF8; --card: #FFFFFF;
+  --text-dark: #2A1520; --text-mid: #6B4155; --text-light: #A07890;
+  --border: rgba(232,67,122,0.12); --shadow: 0 8px 32px rgba(232,67,122,0.12);
+  --nav-bg: #FFFFFF; --header-bg: #FFFFFF; --input-bg: #FFF5F0;
+  --chip-bg: #FFFFFF; --chip-border: rgba(232,67,122,0.2);
+  --phone-bg: #FFFBF8; --search-bg: #FFF5F0;
+}
+[data-theme="dark"] {
+  --bg: #12060D; --bg2: #1A0A12; --card: #231018;
+  --text-dark: #F8E8EF; --text-mid: #D4A8C0; --text-light: #8B5A74;
+  --border: rgba(232,67,122,0.18); --shadow: 0 8px 32px rgba(0,0,0,0.4);
+  --nav-bg: #1A0A12; --header-bg: #1A0A12; --input-bg: #2D1520;
+  --chip-bg: #2D1520; --chip-border: rgba(232,67,122,0.3);
+  --phone-bg: #1A0A12; --search-bg: #2D1520;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+:root {
+  --rose:#E8437A; --rose-light:#FF6B9D; --rose-dark:#C2185B;
+  --gold:#D4A853; --gold-light:#F0C97A;
+  --green:#25D366; --splash-dark:#1A0A12; --splash-dark2:#2D1520;
+}
 
+/* ========== BODY & PHONE ========== */
+body {
+  font-family:'DM Sans',sans-serif;
+  background: linear-gradient(135deg,#f0d6e8 0%,#e8d0f0 50%,#f5e0ea 100%);
+  min-height:100vh; display:flex; justify-content:center; align-items:flex-start; padding:24px;
+  transition: background 0.4s;
+}
+[data-theme="dark"] body { background: linear-gradient(135deg,#0a0510 0%,#15091A 50%,#0d0810 100%); }
+.phone {
+  width:375px; height:812px; border-radius:50px; overflow:hidden; position:relative;
+  background: var(--phone-bg);
+  box-shadow: 0 40px 100px rgba(0,0,0,0.35), 0 0 0 2px #1A0A12, 0 0 0 4px rgba(232,67,122,0.15);
+  transition: background 0.4s;
+}
+.notch {
+  position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:120px; height:34px; background:#0a0510;
+  border-radius:0 0 20px 20px; z-index:500;
+}
+
+/* ========== SCREENS ========== */
+.screen {
+  position:absolute; inset:0; display:none; flex-direction:column;
+  overflow:hidden; border-radius:50px; background:var(--bg2);
+  transition: background 0.4s;
+}
+.screen.active { display:flex; }
+
+/* ========== PAGE TRANSITIONS ========== */
+.sub-page {
+  position:absolute; inset:0; background:var(--bg2); display:none;
+  flex-direction:column; overflow:hidden; z-index:20; border-radius:50px;
+  transition: background 0.4s;
+}
+.sub-page.active { display:flex; animation: page3DIn 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+.sub-page.leaving { animation: page3DOut 0.3s ease forwards; }
+
+@keyframes page3DIn {
+  from { transform: perspective(800px) rotateY(15deg) translateX(80%) scale(0.9); opacity:0; }
+  to { transform: perspective(800px) rotateY(0deg) translateX(0) scale(1); opacity:1; }
+}
+@keyframes page3DOut {
+  from { transform: perspective(800px) rotateY(0deg) translateX(0) scale(1); opacity:1; }
+  to { transform: perspective(800px) rotateY(-15deg) translateX(-80%) scale(0.9); opacity:0; }
+}
+@keyframes fadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes pulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.05); } }
+@keyframes shimmer {
+  0% { background-position:-200% center; }
+  100% { background-position:200% center; }
+}
+@keyframes bounceIn {
+  0% { transform:scale(0.3); opacity:0; }
+  50% { transform:scale(1.05); }
+  70% { transform:scale(0.9); }
+  100% { transform:scale(1); opacity:1; }
+}
+@keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+@keyframes otpShake {
+  0%,100% { transform:translateX(0); }
+  20%,60% { transform:translateX(-8px); }
+  40%,80% { transform:translateX(8px); }
+}
+@keyframes glow {
+  0%,100% { box-shadow: 0 0 5px rgba(232,67,122,0.3); }
+  50% { box-shadow: 0 0 20px rgba(232,67,122,0.7), 0 0 40px rgba(232,67,122,0.3); }
+}
+
+/* ========== SPLASH / LOGIN SCREEN ========== */
+#screen-splash {
+  background: linear-gradient(160deg,#1A0A12 0%,#2D1520 40%,#3D1A2A 70%,#1A0A12 100%);
+  align-items:center; justify-content:space-between; padding-bottom:32px;
+}
+.splash-bg {
+  position:absolute; inset:0;
+  background:url('https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80') center/cover;
+  opacity:0.18;
+}
+.splash-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to bottom,rgba(26,10,18,0.7) 0%,rgba(26,10,18,0.15) 40%,rgba(26,10,18,0.95) 100%);
+}
+.splash-top {
+  position:relative; z-index:10; display:flex; flex-direction:column;
+  align-items:center; gap:12px; padding-top:80px;
+  animation: fadeUp 0.9s ease forwards;
+}
+.logo-circle {
+  width:88px; height:88px; border-radius:50%;
+  background:linear-gradient(135deg,var(--rose),var(--rose-dark));
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Playfair Display',serif; font-size:32px; color:white; font-weight:700;
+  box-shadow: 0 0 0 3px rgba(232,67,122,0.3), 0 0 40px rgba(232,67,122,0.5);
+  animation: glow 3s ease-in-out infinite;
+}
+.brand-name { font-family:'Playfair Display',serif; font-size:26px; color:white; text-align:center; line-height:1.2; }
+.brand-name span { color:var(--rose-light); }
+.tagline { font-size:11px; color:rgba(255,255,255,0.5); letter-spacing:2.5px; text-transform:uppercase; }
+
+/* LOGIN FORM */
+#login-step-form, #login-step-otp { position:relative; z-index:10; width:100%; padding:0 22px; display:flex; flex-direction:column; gap:10px; animation: fadeUp 1.1s ease forwards; }
+#login-step-otp { display:none; }
+
+.login-lbl { font-size:10px; color:rgba(255,255,255,0.55); letter-spacing:1px; text-transform:uppercase; margin-bottom:2px; display:block; }
+.login-input {
+  width:100%; padding:12px 15px;
+  background:rgba(255,255,255,0.1); border:1.5px solid rgba(255,255,255,0.2);
+  border-radius:13px; color:white; font-size:14px; font-family:'DM Sans',sans-serif;
+  outline:none; backdrop-filter:blur(8px); transition:border-color 0.2s, box-shadow 0.2s;
+}
+.login-input::placeholder { color:rgba(255,255,255,0.3); }
+.login-input:focus { border-color:var(--rose-light); box-shadow:0 0 0 3px rgba(255,107,157,0.15); }
+.login-input.error { border-color:#ff4444; animation: otpShake 0.4s ease; }
+
+.phone-input-row { display:flex; gap:8px; }
+.country-code {
+  padding:12px 12px; background:rgba(255,255,255,0.1); border:1.5px solid rgba(255,255,255,0.2);
+  border-radius:13px; color:white; font-size:14px; font-weight:600; backdrop-filter:blur(8px);
+  flex-shrink:0; display:flex; align-items:center; gap:4px;
+}
+
+.login-btn {
+  width:100%; padding:14px;
+  background:linear-gradient(135deg,var(--rose),var(--rose-dark));
+  color:white; border:none; border-radius:13px;
+  font-family:'DM Sans',sans-serif; font-size:15px; font-weight:600;
+  cursor:pointer; box-shadow:0 8px 24px rgba(232,67,122,0.4); transition:transform 0.15s, box-shadow 0.2s;
+  position:relative; overflow:hidden;
+}
+.login-btn::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
+  background-size:200% 100%; animation: shimmer 2s infinite;
+}
+.login-btn:active { transform:scale(0.98); }
+
+.otp-info { color:rgba(255,255,255,0.6); font-size:12px; text-align:center; }
+.otp-info span { color:var(--rose-light); font-weight:600; }
+.otp-boxes { display:flex; gap:10px; justify-content:center; }
+.otp-box {
+  width:50px; height:58px; background:rgba(255,255,255,0.1);
+  border:2px solid rgba(255,255,255,0.2); border-radius:12px;
+  text-align:center; font-size:22px; font-weight:700; color:white;
+  outline:none; font-family:'DM Sans',sans-serif; transition:border-color 0.2s, transform 0.2s;
+  backdrop-filter:blur(8px);
+}
+.otp-box:focus { border-color:var(--rose-light); transform:scale(1.05); box-shadow:0 0 0 3px rgba(255,107,157,0.2); }
+.otp-resend { color:rgba(255,255,255,0.4); font-size:12px; text-align:center; }
+.otp-resend span { color:var(--rose-light); cursor:pointer; font-weight:600; }
+
+.divider-row { display:flex; align-items:center; gap:10px; color:rgba(255,255,255,0.3); font-size:11px; }
+.divider-row::before,.divider-row::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.12); }
+
+/* DARK Google Button */
+.google-btn {
+  width:100%; padding:13px 15px;
+  background:#131314; border:1px solid #444; border-radius:50px;
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  cursor:pointer; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500; color:white;
+  transition:background 0.2s, transform 0.15s;
+}
+.google-btn:hover { background:#1e1e1e; }
+.google-btn:active { transform:scale(0.98); }
+.g-icon { width:20px; height:20px; flex-shrink:0; }
+
+/* ========== HOME SCREEN ========== */
+#screen-home { background:var(--bg); flex-direction:column; transition:background 0.4s; }
+
+.home-header {
+  padding:46px 20px 12px; background:var(--header-bg);
+  display:flex; align-items:center; gap:10px;
+  border-bottom:1px solid var(--border); flex-shrink:0;
+  transition:background 0.4s, border-color 0.4s;
+}
+.search-bar {
+  flex:1; background:var(--search-bg); border-radius:12px; padding:9px 14px;
+  display:flex; align-items:center; gap:8px; border:1.5px solid var(--border);
+  cursor:text; transition:background 0.4s, border-color 0.4s;
+}
+.search-bar input {
+  flex:1; background:transparent; border:none; outline:none;
+  font-family:'DM Sans',sans-serif; font-size:13px; color:var(--text-dark);
+}
+.search-bar input::placeholder { color:var(--text-light); }
+.search-icon { color:var(--rose); flex-shrink:0; }
+.clear-search { color:var(--text-light); cursor:pointer; font-size:14px; display:none; }
+
+/* HAMBURGER */
+.hamburger-btn {
+  width:38px; height:38px; background:var(--rose); border-radius:10px;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  cursor:pointer; transition:transform 0.2s, box-shadow 0.2s;
+  position:relative;
+}
+.hamburger-btn:active { transform:scale(0.9); }
+.hamburger-btn svg { transition:transform 0.3s; }
+
+/* HAMBURGER MENU OVERLAY */
+.hamburger-overlay {
+  position:absolute; inset:0; background:rgba(26,10,18,0.6); z-index:40;
+  display:none; border-radius:50px; backdrop-filter:blur(3px);
+}
+.hamburger-overlay.open { display:block; animation: fadeIn 0.2s ease; }
+.hamburger-menu {
+  position:absolute; top:50px; right:12px; z-index:41;
+  background:var(--card); border-radius:18px; padding:8px 0; min-width:180px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.25); border:1px solid var(--border);
+  animation: bounceIn 0.3s ease forwards;
+  transition:background 0.4s;
+}
+.hm-item {
+  padding:12px 18px; display:flex; align-items:center; gap:12px;
+  cursor:pointer; transition:background 0.15s; border-radius:10px; margin:2px 6px;
+  font-size:14px; font-weight:500; color:var(--text-dark);
+}
+.hm-item:hover { background:var(--bg); }
+.hm-item:active { background:rgba(232,67,122,0.08); }
+.hm-item .hm-icon { font-size:18px; }
+
+/* THEME TOGGLE */
+.theme-toggle {
+  position:absolute; top:50px; left:12px; z-index:41;
+  background:var(--card); border-radius:30px; padding:6px 12px;
+  display:flex; align-items:center; gap:8px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.15); border:1px solid var(--border);
+  cursor:pointer; animation: bounceIn 0.3s ease forwards;
+  transition:background 0.4s;
+}
+.theme-toggle span { font-size:13px; font-weight:600; color:var(--text-dark); }
+.toggle-track {
+  width:42px; height:24px; background:#ddd; border-radius:12px; position:relative;
+  transition:background 0.3s;
+}
+[data-theme="dark"] .toggle-track { background:var(--rose); }
+.toggle-thumb {
+  width:18px; height:18px; background:white; border-radius:50%;
+  position:absolute; top:3px; left:3px; transition:transform 0.3s;
+  box-shadow:0 2px 6px rgba(0,0,0,0.2);
+}
+[data-theme="dark"] .toggle-thumb { transform:translateX(18px); }
+
+.categories-scroll {
+  padding:14px 20px; display:flex; gap:14px; overflow-x:auto;
+  background:var(--header-bg); scrollbar-width:none; flex-shrink:0;
+  transition:background 0.4s;
+}
+.categories-scroll::-webkit-scrollbar { display:none; }
+.cat-item { display:flex; flex-direction:column; align-items:center; gap:6px; flex-shrink:0; cursor:pointer; }
+.cat-img {
+  width:58px; height:58px; border-radius:50%; overflow:hidden;
+  border:2.5px solid var(--border); transition:border-color 0.2s, transform 0.2s;
+}
+.cat-item:active .cat-img { border-color:var(--rose); transform:scale(0.95); }
+.cat-item.selected .cat-img { border-color:var(--rose); box-shadow:0 0 0 2px rgba(232,67,122,0.3); }
+.cat-img img { width:100%; height:100%; object-fit:cover; }
+.cat-name { font-size:11px; color:var(--text-mid); font-weight:500; }
+.cat-item.selected .cat-name { color:var(--rose); font-weight:600; }
+
+.filter-row {
+  padding:10px 20px; display:flex; gap:10px; background:var(--header-bg);
+  border-bottom:1px solid var(--border); flex-shrink:0; overflow-x:auto; scrollbar-width:none;
+  transition:background 0.4s;
+}
+.filter-row::-webkit-scrollbar { display:none; }
+.filter-chip {
+  padding:6px 14px; border-radius:20px; font-size:12px; font-weight:500;
+  border:1.5px solid var(--chip-border); color:var(--text-mid); background:var(--chip-bg);
+  cursor:pointer; white-space:nowrap; flex-shrink:0; transition:all 0.2s;
+  display:flex; align-items:center; gap:4px;
+}
+.filter-chip.active {
+  background:linear-gradient(135deg,var(--rose),var(--rose-dark));
+  color:white; border-color:transparent;
+  box-shadow:0 4px 12px rgba(232,67,122,0.3);
+}
+.filter-chip:active { transform:scale(0.95); }
+
+/* SORT DROPDOWN */
+.sort-dropdown {
+  position:absolute; top:100%; left:0; z-index:50;
+  background:var(--card); border-radius:14px; padding:6px 0; min-width:160px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.2); border:1px solid var(--border);
+  display:none; animation: bounceIn 0.25s ease;
+}
+.sort-dropdown.open { display:block; }
+.sort-option {
+  padding:10px 16px; font-size:13px; color:var(--text-dark);
+  cursor:pointer; transition:background 0.15s; font-weight:500;
+}
+.sort-option:hover,.sort-option:active { background:rgba(232,67,122,0.08); }
+.sort-option.selected { color:var(--rose); }
+
+.scroll-content { flex:1; overflow-y:auto; scrollbar-width:none; padding-bottom:72px; }
+.scroll-content::-webkit-scrollbar { display:none; }
+
+/* SEARCH RESULTS */
+.search-results { padding:8px 16px; display:none; flex-direction:column; gap:8px; }
+.search-results.show { display:flex; }
+.search-result-item {
+  background:var(--card); border-radius:12px; padding:12px;
+  display:flex; align-items:center; gap:12px; cursor:pointer;
+  border:1px solid var(--border); transition:transform 0.15s, box-shadow 0.15s;
+}
+.search-result-item:active { transform:scale(0.98); box-shadow:var(--shadow); }
+.search-result-img { width:48px; height:48px; border-radius:10px; overflow:hidden; flex-shrink:0; }
+.search-result-img img { width:100%; height:100%; object-fit:cover; }
+.search-result-name { font-size:13px; font-weight:600; color:var(--text-dark); }
+.search-result-type { font-size:11px; color:var(--rose); margin-top:2px; }
+.search-result-price { font-size:12px; font-weight:700; color:var(--text-dark); margin-top:2px; }
+.search-empty { text-align:center; padding:30px 20px; color:var(--text-light); font-size:13px; display:none; }
+.search-empty.show { display:block; }
+
+.section-title { font-family:'Playfair Display',serif; font-size:18px; color:var(--text-dark); font-weight:600; padding:16px 20px 10px; }
+.section-subtitle { font-size:11px; color:var(--text-light); padding:0 20px 10px; margin-top:-6px; }
+
+.promo-banner {
+  margin:14px 20px 0; border-radius:18px; padding:16px 18px;
+  display:flex; justify-content:space-between; align-items:center;
+  overflow:hidden; position:relative;
+  background:linear-gradient(135deg,#2D1520 0%,#E8437A 60%,#FF6B9D 100%);
+}
+.promo-banner::before { content:''; position:absolute; right:-30px; top:-30px; width:120px; height:120px; background:rgba(255,255,255,0.07); border-radius:50%; }
+.promo-banner::after { content:''; position:absolute; right:30px; bottom:-40px; width:80px; height:80px; background:rgba(255,255,255,0.05); border-radius:50%; }
+.promo-text .lbl { font-size:10px; color:rgba(255,255,255,0.7); text-transform:uppercase; letter-spacing:1px; }
+.promo-text .headline { font-family:'Playfair Display',serif; font-size:17px; color:white; line-height:1.2; margin-top:3px; }
+.promo-text .sub { font-size:11px; color:rgba(255,255,255,0.7); margin-top:3px; }
+.promo-enroll-btn { background:white; color:var(--rose-dark); border:none; padding:9px 14px; border-radius:12px; font-size:12px; font-weight:700; cursor:pointer; flex-shrink:0; font-family:'DM Sans',sans-serif; transition:transform 0.15s; position:relative; z-index:1; }
+.promo-enroll-btn:active { transform:scale(0.95); }
+
+/* COURSES ROW */
+.courses-row { padding:0 20px; display:flex; gap:14px; overflow-x:auto; scrollbar-width:none; padding-bottom:6px; }
+.courses-row::-webkit-scrollbar { display:none; }
+.course-card {
+  width:162px; flex-shrink:0; background:var(--card); border-radius:18px;
+  overflow:hidden; box-shadow:var(--shadow); cursor:pointer;
+  transition:transform 0.2s, box-shadow 0.2s; border:1px solid var(--border);
+}
+.course-card:hover { transform:translateY(-4px) scale(1.02); box-shadow:0 16px 48px rgba(232,67,122,0.2); }
+.course-card:active { transform:scale(0.97); }
+.course-card-img { width:100%; height:112px; position:relative; overflow:hidden; }
+.course-card-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.3s; }
+.course-card:hover .course-card-img img { transform:scale(1.08); }
+.course-badge { position:absolute; top:8px; left:8px; background:var(--rose); color:white; font-size:9px; font-weight:700; padding:3px 8px; border-radius:6px; text-transform:uppercase; letter-spacing:0.5px; }
+.course-badge.gold { background:linear-gradient(135deg,var(--gold),#c49020); }
+.heart-btn { position:absolute; top:8px; right:8px; width:28px; height:28px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; box-shadow:0 2px 8px rgba(0,0,0,0.15); cursor:pointer; transition:transform 0.2s; }
+.heart-btn:active { transform:scale(1.3); }
+.course-info { padding:10px 12px 12px; }
+.course-name { font-size:13px; font-weight:600; color:var(--text-dark); line-height:1.3; }
+.course-type { font-size:10px; color:var(--rose); font-weight:600; margin-top:2px; text-transform:uppercase; letter-spacing:0.5px; }
+.time-slots { display:flex; gap:4px; margin-top:8px; flex-wrap:wrap; }
+.time-slot { padding:3px 8px; border-radius:6px; font-size:10px; font-weight:600; background:var(--bg); color:var(--text-mid); border:1px solid var(--chip-border); cursor:pointer; transition:all 0.15s; }
+.time-slot.active { background:var(--rose); color:white; border-color:transparent; }
+
+.popular-row { padding:0 20px; display:flex; gap:14px; overflow-x:auto; scrollbar-width:none; padding-bottom:6px; }
+.popular-row::-webkit-scrollbar { display:none; }
+.popular-card {
+  width:130px; flex-shrink:0; border-radius:16px; overflow:hidden;
+  position:relative; height:92px; cursor:pointer;
+  transition:transform 0.2s, box-shadow 0.2s;
+}
+.popular-card:hover { transform:scale(1.05); box-shadow:0 12px 32px rgba(0,0,0,0.2); }
+.popular-card:active { transform:scale(0.96); }
+.popular-card img { width:100%; height:100%; object-fit:cover; }
+.popular-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(26,10,18,0.75) 0%,transparent 60%); display:flex; align-items:flex-end; padding:8px; }
+.popular-card-name { font-size:11px; font-weight:600; color:white; font-family:'Playfair Display',serif; }
+
+/* ========== BOTTOM NAV ========== */
+.bottom-nav {
+  position:absolute; bottom:0; left:0; right:0; height:70px;
+  background:var(--nav-bg); border-top:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-around; padding:0 8px 10px;
+  box-shadow:0 -4px 20px rgba(0,0,0,0.08); z-index:30;
+  transition:background 0.4s, border-color 0.4s;
+}
+.nav-item { display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; padding:4px 8px; border-radius:12px; transition:transform 0.15s, background 0.2s; }
+.nav-item:active { transform:scale(0.85); background:rgba(232,67,122,0.08); }
+.nav-item svg { width:22px; height:22px; color:var(--text-light); transition:color 0.2s; }
+.nav-item span { font-size:10px; color:var(--text-light); font-weight:500; transition:color 0.2s; }
+.nav-item.active svg { color:var(--rose); }
+.nav-item.active span { color:var(--rose); font-weight:700; }
+.nav-dot { width:4px; height:4px; border-radius:50%; background:var(--rose); opacity:0; transition:opacity 0.2s; }
+.nav-item.active .nav-dot { opacity:1; }
+
+/* ========== SUB PAGE HEADER ========== */
+.sub-header {
+  padding:50px 20px 14px; background:var(--header-bg);
+  display:flex; align-items:center; gap:12px;
+  border-bottom:1px solid var(--border); flex-shrink:0;
+  transition:background 0.4s, border-color 0.4s;
+}
+.back-circle {
+  width:36px; height:36px; background:var(--bg); border-radius:50%;
+  display:flex; align-items:center; justify-content:center; font-size:16px;
+  cursor:pointer; flex-shrink:0; border:1.5px solid var(--border);
+  transition:background 0.15s, transform 0.15s;
+}
+.back-circle:active { background:rgba(232,67,122,0.1); transform:scale(0.9); }
+.sub-header-title { font-family:'Playfair Display',serif; font-size:18px; color:var(--text-dark); font-weight:600; }
+
+/* ========== COURSE DETAIL ========== */
+.detail-hero { width:100%; height:285px; position:relative; overflow:hidden; flex-shrink:0; }
+.detail-hero img { width:100%; height:100%; object-fit:cover; transition:transform 0.3s; }
+.detail-hero-overlay { position:absolute; inset:0; background:linear-gradient(to bottom,rgba(26,10,18,0.25) 0%,transparent 40%,rgba(26,10,18,0.7) 100%); }
+.hero-back {
+  position:absolute; top:48px; left:16px; width:38px; height:38px;
+  background:rgba(255,255,255,0.92); border-radius:50%;
+  display:flex; align-items:center; justify-content:center; font-size:16px;
+  z-index:10; cursor:pointer; backdrop-filter:blur(8px);
+  transition:background 0.15s, transform 0.15s;
+}
+.hero-back:active { transform:scale(0.9); }
+.hero-share {
+  position:absolute; top:48px; right:16px; width:38px; height:38px;
+  background:rgba(255,255,255,0.92); border-radius:50%;
+  display:flex; align-items:center; justify-content:center; font-size:15px;
+  z-index:10; cursor:pointer; backdrop-filter:blur(8px);
+  transition:transform 0.15s;
+}
+.hero-share:active { transform:scale(0.9); }
+.hero-course-title {
+  position:absolute; bottom:18px; left:20px;
+  font-family:'Playfair Display',serif; font-size:30px; color:white;
+  font-style:italic; text-shadow:0 2px 12px rgba(0,0,0,0.35);
+}
+.detail-scroll { flex:1; overflow-y:auto; scrollbar-width:none; padding-bottom:84px; }
+.detail-scroll::-webkit-scrollbar { display:none; }
+.detail-top { padding:16px 20px 10px; display:flex; justify-content:space-between; align-items:flex-start; }
+.detail-cat-badge { font-size:11px; font-weight:700; color:var(--rose); background:rgba(232,67,122,0.1); padding:5px 12px; border-radius:20px; text-transform:uppercase; letter-spacing:0.5px; }
+.stars { color:var(--gold); font-size:13px; }
+.detail-info-rows { padding:0 20px; display:flex; flex-direction:column; gap:12px; }
+.detail-info-row { display:flex; align-items:flex-start; gap:12px; }
+.detail-info-icon {
+  width:36px; height:36px; border-radius:10px; display:flex; align-items:center;
+  justify-content:center; flex-shrink:0; margin-top:1px;
+  background:rgba(232,67,122,0.08);
+}
+/* REALISTIC ICONS */
+.icon-location { background:linear-gradient(135deg,#FF6B6B,#e8437a); }
+.icon-phone { background:linear-gradient(135deg,#4CAF50,#2E7D32); }
+.icon-clock { background:linear-gradient(135deg,#2196F3,#1565C0); }
+.icon-money { background:linear-gradient(135deg,#FF9800,#E65100); }
+.icon-status { background:linear-gradient(135deg,#4CAF50,#1B5E20); }
+.icon-duration { background:linear-gradient(135deg,#9C27B0,#4A148C); }
+.detail-info-text { font-size:13px; color:var(--text-dark); font-weight:500; padding-top:8px; line-height:1.4; }
+.detail-info-text .sub { font-size:11px; color:var(--text-light); font-weight:400; display:block; margin-top:1px; }
+.detail-divider { height:1px; background:var(--border); margin:14px 20px; }
+.detail-desc { padding:0 20px; font-size:13px; color:var(--text-mid); line-height:1.8; }
+.instructor-row {
+  padding:14px; display:flex; align-items:center; gap:12px;
+  background:var(--card); margin:14px 20px 0; border-radius:16px; box-shadow:var(--shadow);
+  border:1px solid var(--border); transition:background 0.4s;
+}
+.instructor-avatar { width:46px; height:46px; border-radius:50%; overflow:hidden; border:2.5px solid var(--rose-light); flex-shrink:0; }
+.instructor-avatar img { width:100%; height:100%; object-fit:cover; }
+.inst-name { font-size:13px; font-weight:700; color:var(--text-dark); }
+.inst-role { font-size:11px; color:var(--text-light); margin-top:2px; }
+.rating-badge { margin-left:auto; background:rgba(212,168,83,0.12); padding:6px 10px; border-radius:10px; }
+.rating-badge span { font-size:13px; font-weight:700; color:var(--gold); }
+.book-btn { position:absolute; bottom:0; left:0; right:0; padding:16px 20px 24px; background:var(--nav-bg); border-top:1px solid var(--border); transition:background 0.4s; }
+.book-btn button {
+  width:100%; padding:16px; border:none; border-radius:16px;
+  background:linear-gradient(135deg,var(--rose),var(--rose-dark));
+  color:white; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700;
+  cursor:pointer; box-shadow:0 8px 24px rgba(232,67,122,0.4);
+  transition:transform 0.15s; position:relative; overflow:hidden;
+}
+.book-btn button::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent); background-size:200% 100%; animation:shimmer 2s infinite; }
+.book-btn button:active { transform:scale(0.98); }
+
+/* ========== ABOUT PAGE ========== */
+.about-scroll { flex:1; overflow-y:auto; scrollbar-width:none; padding:18px; padding-bottom:30px; }
+.about-scroll::-webkit-scrollbar { display:none; }
+.about-hero-img { width:100%; height:175px; border-radius:18px; overflow:hidden; margin-bottom:16px; }
+.about-hero-img img { width:100%; height:100%; object-fit:cover; }
+.about-title { font-family:'Playfair Display',serif; font-size:21px; color:var(--text-dark); font-weight:700; margin-bottom:4px; }
+.about-tagline { font-size:11px; color:var(--rose); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:12px; font-weight:600; }
+.about-text { font-size:13px; color:var(--text-mid); line-height:1.8; margin-bottom:16px; }
+.about-stat-row { display:flex; gap:10px; margin-bottom:18px; }
+.about-stat { flex:1; background:var(--card); border-radius:16px; padding:14px 8px; text-align:center; box-shadow:var(--shadow); border:1px solid var(--border); transition:background 0.4s; }
+.about-stat .num { font-family:'Playfair Display',serif; font-size:22px; color:var(--rose); font-weight:700; }
+.about-stat .lbl { font-size:10px; color:var(--text-light); margin-top:3px; }
+.about-highlight { background:linear-gradient(135deg,#2D1520,#E8437A,#FF6B9D); border-radius:18px; padding:18px; color:white; margin-bottom:16px; }
+.about-highlight .h-title { font-family:'Playfair Display',serif; font-size:16px; margin-bottom:10px; }
+.about-highlight ul { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.about-highlight li { font-size:12px; opacity:0.92; display:flex; align-items:flex-start; gap:7px; line-height:1.5; }
+.about-highlight li::before { content:'✦'; color:var(--gold-light); font-size:10px; margin-top:3px; flex-shrink:0; }
+
+/* ========== COURSES LIST ========== */
+.courses-list-scroll { flex:1; overflow-y:auto; scrollbar-width:none; padding:14px; padding-bottom:30px; }
+.courses-list-scroll::-webkit-scrollbar { display:none; }
+.course-list-card {
+  background:var(--card); border-radius:18px; overflow:hidden;
+  box-shadow:var(--shadow); margin-bottom:14px; cursor:pointer;
+  display:flex; align-items:center; gap:14px; padding:13px;
+  transition:transform 0.2s, box-shadow 0.2s; border:1px solid var(--border);
+}
+.course-list-card:hover { transform:translateX(4px); box-shadow:0 12px 40px rgba(232,67,122,0.15); }
+.course-list-card:active { transform:scale(0.98); }
+.course-list-img { width:82px; height:82px; border-radius:14px; overflow:hidden; flex-shrink:0; }
+.course-list-img img { width:100%; height:100%; object-fit:cover; }
+.course-list-name { font-size:14px; font-weight:700; color:var(--text-dark); line-height:1.3; }
+.course-list-type { font-size:10px; color:var(--rose); font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-top:2px; }
+.course-list-meta { font-size:11px; color:var(--text-light); margin-top:4px; }
+.course-list-price { font-size:14px; font-weight:800; color:var(--text-dark); margin-top:5px; }
+.course-list-old { font-size:11px; color:var(--text-light); text-decoration:line-through; margin-left:5px; font-weight:400; }
+
+/* ========== SCHEDULE / CONTACT ========== */
+.contact-scroll { flex:1; overflow-y:auto; scrollbar-width:none; padding:16px; padding-bottom:30px; }
+.contact-scroll::-webkit-scrollbar { display:none; }
+.contact-card { background:var(--card); border-radius:18px; padding:16px; margin-bottom:14px; box-shadow:var(--shadow); border:1px solid var(--border); transition:background 0.4s; }
+.contact-card-title { font-family:'Playfair Display',serif; font-size:16px; color:var(--text-dark); margin-bottom:14px; font-weight:600; }
+.contact-row { display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; }
+.c-icon { width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.c-info .lbl { font-size:10px; color:var(--text-light); text-transform:uppercase; letter-spacing:0.8px; }
+.c-info .val { font-size:13px; color:var(--text-dark); font-weight:600; margin-top:2px; line-height:1.4; }
+.c-info a { color:var(--rose); text-decoration:none; }
+.wa-btn { width:100%; padding:14px; background:linear-gradient(135deg,#25D366,#1a9e4a); color:white; border:none; border-radius:14px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; margin-top:6px; transition:transform 0.15s, box-shadow 0.2s; box-shadow:0 6px 20px rgba(37,211,102,0.3); }
+.wa-btn:active { transform:scale(0.98); }
+.schedule-grid { display:flex; flex-direction:column; gap:10px; }
+.schedule-item {
+  background:var(--bg); border-radius:14px; padding:13px 14px;
+  display:flex; justify-content:space-between; align-items:center;
+  border:1px solid var(--border); transition:background 0.4s;
+}
+.sch-course { font-size:13px; font-weight:700; color:var(--text-dark); }
+.sch-time { font-size:11px; color:var(--text-light); margin-top:2px; }
+.sch-badge { padding:4px 10px; background:rgba(232,67,122,0.1); color:var(--rose); border-radius:20px; font-size:10px; font-weight:700; flex-shrink:0; }
+
+/* ========== CAREER ========== */
+.career-scroll { flex:1; overflow-y:auto; scrollbar-width:none; padding:16px; padding-bottom:30px; }
+.career-scroll::-webkit-scrollbar { display:none; }
+.career-card { background:var(--card); border-radius:18px; padding:16px; margin-bottom:14px; box-shadow:var(--shadow); border:1px solid var(--border); transition:background 0.4s; }
+.career-card-img { width:100%; height:125px; border-radius:14px; overflow:hidden; margin-bottom:12px; }
+.career-card-img img { width:100%; height:100%; object-fit:cover; }
+.career-role { font-family:'Playfair Display',serif; font-size:16px; color:var(--text-dark); font-weight:600; }
+.career-desc { font-size:12px; color:var(--text-mid); line-height:1.7; margin:6px 0 10px; }
+.career-tags { display:flex; gap:6px; flex-wrap:wrap; }
+.career-tag { padding:3px 10px; background:rgba(232,67,122,0.08); color:var(--rose); border-radius:20px; font-size:10px; font-weight:700; }
+.apply-btn { width:100%; padding:12px; background:linear-gradient(135deg,var(--rose),var(--rose-dark)); color:white; border:none; border-radius:12px; font-size:13px; font-weight:700; cursor:pointer; margin-top:10px; font-family:'DM Sans',sans-serif; transition:transform 0.15s; }
+.apply-btn:active { transform:scale(0.98); }
+
+/* ========== PROFILE ========== */
+.profile-scroll { flex:1; overflow-y:auto; scrollbar-width:none; padding-bottom:80px; }
+.profile-scroll::-webkit-scrollbar { display:none; }
+.profile-hero {
+  padding:48px 20px 28px; display:flex; flex-direction:column; align-items:center; gap:10px;
+  background:linear-gradient(160deg,#1A0A12,#2D1520,#E8437A);
+  position:relative; overflow:hidden;
+}
+.profile-hero::before { content:''; position:absolute; right:-40px; top:-40px; width:160px; height:160px; background:rgba(255,255,255,0.04); border-radius:50%; }
+.profile-avatar {
+  width:84px; height:84px; border-radius:50%; overflow:hidden; border:3px solid white;
+  box-shadow:0 6px 24px rgba(0,0,0,0.3); background:var(--rose);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Playfair Display',serif; font-size:30px; color:white; position:relative; z-index:1;
+}
+.profile-avatar img { width:100%; height:100%; object-fit:cover; }
+.profile-name { font-family:'Playfair Display',serif; font-size:21px; color:white; font-weight:600; position:relative; z-index:1; }
+.profile-contact { font-size:12px; color:rgba(255,255,255,0.65); position:relative; z-index:1; }
+.profile-body { padding:18px; display:flex; flex-direction:column; gap:12px; background:var(--bg2); transition:background 0.4s; }
+.p-section-title { font-size:11px; color:var(--text-light); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:2px; font-weight:600; }
+.p-menu-item {
+  display:flex; align-items:center; gap:12px; padding:13px 15px;
+  background:var(--card); border-radius:16px; cursor:pointer;
+  box-shadow:0 2px 10px rgba(0,0,0,0.06); transition:background 0.15s, transform 0.15s;
+  border:1px solid var(--border);
+}
+.p-menu-item:active { background:rgba(232,67,122,0.06); transform:scale(0.98); }
+.p-menu-icon { width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:17px; }
+.p-menu-text .pm-title { font-size:13px; font-weight:700; color:var(--text-dark); }
+.p-menu-text .pm-sub { font-size:11px; color:var(--text-light); margin-top:1px; }
+.p-arrow { color:var(--text-light); font-size:16px; margin-left:auto; }
+.logout-btn { width:100%; padding:14px; background:rgba(232,67,122,0.08); color:var(--rose); border:1.5px solid rgba(232,67,122,0.25); border-radius:16px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; cursor:pointer; transition:background 0.2s; }
+.logout-btn:active { background:rgba(232,67,122,0.15); }
+
+/* ========== OTP LOADER ========== */
+.otp-sending { display:flex; flex-direction:column; align-items:center; gap:12px; padding:20px 0; }
+.spinner { width:40px; height:40px; border:3px solid rgba(255,255,255,0.2); border-top-color:var(--rose-light); border-radius:50%; animation:spin 0.8s linear infinite; }
+.otp-sending p { color:rgba(255,255,255,0.6); font-size:13px; }
+
+/* ========== TOAST ========== */
+.toast {
+  position:absolute; bottom:82px; left:50%; transform:translateX(-50%);
+  background:#1A0A12; color:white; padding:10px 22px; border-radius:24px;
+  font-size:13px; font-weight:500; z-index:999; opacity:0;
+  transition:opacity 0.3s, transform 0.3s; white-space:nowrap; pointer-events:none;
+  border:1px solid rgba(232,67,122,0.3); box-shadow:0 8px 24px rgba(0,0,0,0.3);
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(-4px); }
+[data-theme="dark"] .toast { background:#2D1520; }
+
+/* ========== MODAL ========== */
+.modal-overlay {
+  position:absolute; inset:0; background:rgba(26,10,18,0.65); z-index:200;
+  display:none; align-items:center; justify-content:center; border-radius:50px;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.open { display:flex; animation:fadeIn 0.2s ease; }
+.modal-box {
+  width:calc(100% - 40px); background:var(--card); border-radius:24px; padding:24px;
+  box-shadow:0 24px 60px rgba(0,0,0,0.3); border:1px solid var(--border);
+  animation:bounceIn 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  transition:background 0.4s;
+}
+.modal-title { font-family:'Playfair Display',serif; font-size:18px; color:var(--text-dark); font-weight:600; margin-bottom:6px; }
+.modal-sub { font-size:12px; color:var(--text-light); margin-bottom:18px; line-height:1.5; }
+.modal-input { width:100%; padding:12px 15px; background:var(--input-bg); border:1.5px solid var(--border); border-radius:12px; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--text-dark); outline:none; margin-bottom:12px; transition:border-color 0.2s; }
+.modal-input:focus { border-color:var(--rose); }
+.modal-btn { width:100%; padding:14px; background:linear-gradient(135deg,var(--rose),var(--rose-dark)); color:white; border:none; border-radius:12px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:700; cursor:pointer; transition:transform 0.15s; }
+.modal-btn:active { transform:scale(0.98); }
+
+/* ========== FILTER APPLIED BANNER ========== */
+.filter-banner {
+  background:rgba(232,67,122,0.08); border:1px solid rgba(232,67,122,0.2);
+  border-radius:10px; margin:8px 20px 0; padding:8px 14px;
+  display:none; align-items:center; justify-content:space-between; gap:8px;
+  font-size:12px; color:var(--rose); font-weight:600;
+}
+.filter-banner.show { display:flex; }
+.filter-clear { cursor:pointer; font-size:14px; }
+</style>
+</head>
+<body>
+<div class="phone" id="app">
+  <div class="notch"></div>
+
+  <!-- ===================== SCREEN 1: LOGIN ===================== -->
+  <div class="screen active" id="screen-splash">
+    <div class="splash-bg"></div>
+    <div class="splash-overlay"></div>
+
+    <div class="splash-top">
+      <div class="logo-circle">PW</div>
+      <div class="brand-name"><span>Pretty Women</span><br>Beauty Academy</div>
+      <div class="tagline">Learn · Glow · Transform</div>
+    </div>
+
+    <!-- STEP 1: Form -->
+    <div id="login-step-form">
+      <div>
+        <label class="login-lbl">Your Full Name</label>
+        <input class="login-input" id="inp-name" type="text" placeholder="e.g. Priya Sharma" autocomplete="off"/>
+      </div>
+      <div>
+        <label class="login-lbl">Mobile Number</label>
+        <div class="phone-input-row">
+          <div class="country-code">🇮🇳 +91</div>
+          <input class="login-input" id="inp-phone" type="tel" placeholder="9XXXXXXXXX" maxlength="10" style="flex:1"/>
+        </div>
+        <div id="phone-error" style="color:#ff8888;font-size:11px;margin-top:4px;display:none;padding-left:2px;">⚠ Please enter a valid 10-digit Indian mobile number</div>
+      </div>
+      <button class="login-btn" id="send-otp-btn" onclick="sendOTP()">Send OTP →</button>
+      <div class="divider-row">or sign in with</div>
+      <button class="google-btn" onclick="doGoogleLogin()">
+        <svg class="g-icon" viewBox="0 0 48 48">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        Sign in with Google
+      </button>
+    </div>
+
+    <!-- STEP 2: OTP -->
+    <div id="login-step-otp">
+      <div class="otp-info">OTP sent to <span id="otp-phone-display">+91 XXXXXXXXXX</span></div>
+      <!-- OTP Demo Display Box -->
+      <div id="otp-demo-box" style="display:none;background:rgba(232,67,122,0.15);border:2px dashed rgba(232,67,122,0.5);border-radius:14px;padding:12px 16px;text-align:center;">
+        <div style="font-size:10px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">📱 Your OTP Code</div>
+        <div id="otp-code-display" style="font-size:30px;font-weight:800;color:white;letter-spacing:8px;font-family:'DM Sans',sans-serif;"></div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:4px;">Tap the boxes above and enter this code</div>
+      </div>
+      <div class="otp-boxes">
+        <input class="otp-box" id="otp0" type="tel" maxlength="1" oninput="otpMove(this,0)"/>
+        <input class="otp-box" id="otp1" type="tel" maxlength="1" oninput="otpMove(this,1)"/>
+        <input class="otp-box" id="otp2" type="tel" maxlength="1" oninput="otpMove(this,2)"/>
+        <input class="otp-box" id="otp3" type="tel" maxlength="1" oninput="otpMove(this,3)"/>
+        <input class="otp-box" id="otp4" type="tel" maxlength="1" oninput="otpMove(this,4)"/>
+        <input class="otp-box" id="otp5" type="tel" maxlength="1" oninput="otpMove(this,5)"/>
+      </div>
+      <div id="otp-countdown" class="otp-resend">Resend OTP in <span id="countdown-num">30</span>s</div>
+      <div id="otp-resend-btn" class="otp-resend" style="display:none;">Didn't receive? <span onclick="resendOTP()">Resend OTP</span></div>
+      <button class="login-btn" onclick="verifyOTP()">✓ Verify &amp; Continue</button>
+      <div style="text-align:center;margin-top:4px;"><span style="color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer;" onclick="backToForm()">← Change number</span></div>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN 2: HOME ===================== -->
+  <div class="screen" id="screen-home">
+    <div id="home-main" style="display:flex;flex-direction:column;height:100%;position:relative;">
+
+      <!-- Header -->
+      <div class="home-header" style="position:relative;">
+        <div class="search-bar" id="search-bar-el">
+          <svg class="search-icon" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input id="search-input" type="text" placeholder="Search courses..." oninput="doSearch(this.value)" onfocus="showSearchResults()"/>
+          <span class="clear-search" id="clear-search" onclick="clearSearch()">✕</span>
+        </div>
+        <div class="hamburger-btn" id="hamburger-btn" onclick="toggleHamburger()">
+          <svg width="18" height="18" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </div>
+        <!-- Sort dropdown relative anchor -->
+        <div id="sort-dropdown-anchor" style="position:absolute;top:100%;left:20px;z-index:55;">
+          <div class="sort-dropdown" id="sort-dropdown">
+            <div class="sort-option selected" onclick="setSortBy('Recommended')">⭐ Recommended</div>
+            <div class="sort-option" onclick="setSortBy('Price: Low to High')">💰 Price: Low to High</div>
+            <div class="sort-option" onclick="setSortBy('Price: High to Low')">💎 Price: High to Low</div>
+            <div class="sort-option" onclick="setSortBy('Duration: Short First')">⏱ Duration: Short First</div>
+            <div class="sort-option" onclick="setSortBy('Top Rated')">🏆 Top Rated</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hamburger Overlay -->
+      <div class="hamburger-overlay" id="hamburger-overlay" onclick="closeHamburger()">
+        <!-- Theme Toggle -->
+        <div class="theme-toggle" id="theme-toggle-el" onclick="event.stopPropagation(); toggleTheme()">
+          <span id="theme-label">☀️ Light</span>
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </div>
+        <div class="hamburger-menu">
+          <div class="hm-item" onclick="closeHamburger(); navTo('home')"><span class="hm-icon">🏠</span> Home</div>
+          <div class="hm-item" onclick="closeHamburger(); navTo('about')"><span class="hm-icon">ℹ️</span> About Us</div>
+          <div class="hm-item" onclick="closeHamburger(); navTo('courses')"><span class="hm-icon">📚</span> All Courses</div>
+          <div class="hm-item" onclick="closeHamburger(); navTo('career')"><span class="hm-icon">💼</span> Career</div>
+          <div class="hm-item" onclick="closeHamburger(); navTo('schedule')"><span class="hm-icon">📅</span> Schedule</div>
+          <div class="hm-item" onclick="closeHamburger(); navTo('profile')"><span class="hm-icon">👤</span> Profile</div>
+          <div class="hm-item" onclick="closeHamburger(); sendWhatsApp()"><span class="hm-icon">💬</span> WhatsApp Us</div>
+        </div>
+      </div>
+
+      <!-- Categories -->
+      <div class="categories-scroll" id="cat-scroll">
+        <div class="cat-item" id="cat-all" onclick="filterByCategory('all')">
+          <div class="cat-img" style="background:linear-gradient(135deg,var(--rose),var(--rose-dark));display:flex;align-items:center;justify-content:center;font-size:22px;">💄</div>
+          <span class="cat-name">All</span>
+        </div>
+        <div class="cat-item" id="cat-makeup" onclick="filterByCategory('makeup')">
+          <div class="cat-img"><img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=200&q=80" alt="Makeup"/></div>
+          <span class="cat-name">Makeup</span>
+        </div>
+        <div class="cat-item" id="cat-hair" onclick="filterByCategory('hair')">
+          <div class="cat-img"><img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=200&q=80" alt="Hair"/></div>
+          <span class="cat-name">Hair</span>
+        </div>
+        <div class="cat-item" id="cat-bridal" onclick="filterByCategory('bridal')">
+          <div class="cat-img"><img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=200&q=80" alt="Bridal"/></div>
+          <span class="cat-name">Bridal</span>
+        </div>
+        <div class="cat-item" id="cat-skincare" onclick="filterByCategory('skincare')">
+          <div class="cat-img"><img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=200&q=80" alt="Skincare"/></div>
+          <span class="cat-name">Skincare</span>
+        </div>
+        <div class="cat-item" id="cat-nails" onclick="filterByCategory('nails')">
+          <div class="cat-img"><img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=200&q=80" alt="Nails"/></div>
+          <span class="cat-name">Nails</span>
+        </div>
+      </div>
+
+      <!-- Filter Row -->
+      <div class="filter-row" style="position:relative;">
+        <div class="filter-chip" id="chip-sort" onclick="toggleSortDropdown()">
+          <span id="sort-label">Sort By</span> ▾
+        </div>
+        <div class="filter-chip" id="chip-promo" onclick="togglePromoFilter()">🏷️ Promotion</div>
+        <div class="filter-chip active" id="chip-top" onclick="toggleTopRated()">⭐ Top Rated</div>
+      </div>
+
+      <!-- Filter Applied Banner -->
+      <div class="filter-banner" id="filter-banner">
+        <span id="filter-banner-text">Filtered</span>
+        <span class="filter-clear" onclick="clearAllFilters()">✕ Clear</span>
+      </div>
+
+      <!-- Scroll Content -->
+      <div class="scroll-content" id="scroll-main">
+        <!-- Search Results (hidden by default) -->
+        <div class="search-results" id="search-results-container"></div>
+        <div class="search-empty" id="search-empty">🔍 No courses found for "<span id="search-query"></span>"</div>
+
+        <!-- Normal Home Content -->
+        <div id="home-content">
+          <div class="promo-banner">
+            <div class="promo-text">
+              <div class="lbl">Limited Offer</div>
+              <div class="headline">30% Off<br>Bridal Makeup</div>
+              <div class="sub">Enroll before Apr 30</div>
+            </div>
+            <button class="promo-enroll-btn" onclick="openCourse('bridal')">Book Now</button>
+          </div>
+
+          <div class="section-title" id="featured-title">Featured Courses</div>
+          <div class="courses-row" id="featured-row">
+            <div class="course-card" onclick="openCourse('bridal')">
+              <div class="course-card-img"><img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&q=80" alt="Bridal"/><div class="course-badge">Promoted</div><div class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)">🤍</div></div>
+              <div class="course-info"><div class="course-name">Bridal Makeup Masterclass</div><div class="course-type">Bridal · Makeup</div><div class="time-slots"><div class="time-slot active">10 AM</div><div class="time-slot">2 PM</div><div class="time-slot">5 PM</div></div></div>
+            </div>
+            <div class="course-card" onclick="openCourse('hair')">
+              <div class="course-card-img"><img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&q=80" alt="Hair"/><div class="course-badge gold">New</div><div class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)">🤍</div></div>
+              <div class="course-info"><div class="course-name">Advanced Hair Cutting</div><div class="course-type">Hair Dressing</div><div class="time-slots"><div class="time-slot">9 AM</div><div class="time-slot active">1 PM</div></div></div>
+            </div>
+            <div class="course-card" onclick="openCourse('makeup')">
+              <div class="course-card-img"><img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&q=80" alt="Makeup"/><div class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)">🤍</div></div>
+              <div class="course-info"><div class="course-name">Party &amp; Event Glam</div><div class="course-type">Makeup</div><div class="time-slots"><div class="time-slot active">11 AM</div><div class="time-slot">4 PM</div></div></div>
+            </div>
+            <div class="course-card" onclick="openCourse('skincare')">
+              <div class="course-card-img"><img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&q=80" alt="Skincare"/><div class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)">🤍</div></div>
+              <div class="course-info"><div class="course-name">Skincare &amp; Facial Therapy</div><div class="course-type">Skincare</div><div class="time-slots"><div class="time-slot active">9 AM</div><div class="time-slot">12 PM</div></div></div>
+            </div>
+          </div>
+
+          <div class="section-title">Most Popular</div>
+          <div class="popular-row">
+            <div class="popular-card" onclick="openCourse('skincare')"><img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=300&q=80" alt="Skincare"/><div class="popular-overlay"><div class="popular-card-name">Skincare</div></div></div>
+            <div class="popular-card" onclick="openCourse('nails')"><img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=300&q=80" alt="Nails"/><div class="popular-overlay"><div class="popular-card-name">Nail Art</div></div></div>
+            <div class="popular-card" onclick="openCourse('hair')"><img src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?w=300&q=80" alt="Lash"/><div class="popular-overlay"><div class="popular-card-name">Lash Tech</div></div></div>
+            <div class="popular-card" onclick="openCourse('bridal')"><img src="https://images.unsplash.com/photo-1583416750470-965b2707b355?w=300&q=80" alt="Bridal"/><div class="popular-overlay"><div class="popular-card-name">Bridal</div></div></div>
+          </div>
+          <div style="height:10px"></div>
+        </div>
+      </div>
+
+      <!-- Bottom Nav -->
+      <div class="bottom-nav">
+        <div class="nav-item active" id="nav-home" onclick="navTo('home')">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <div class="nav-dot"></div><span>Home</span>
+        </div>
+        <div class="nav-item" id="nav-about" onclick="navTo('about')">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <div class="nav-dot"></div><span>About</span>
+        </div>
+        <div class="nav-item" id="nav-courses" onclick="navTo('courses')">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+          <div class="nav-dot"></div><span>Courses</span>
+        </div>
+        <div class="nav-item" id="nav-career" onclick="navTo('career')">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+          <div class="nav-dot"></div><span>Career</span>
+        </div>
+        <div class="nav-item" id="nav-profile" onclick="navTo('profile')">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <div class="nav-dot"></div><span>Profile</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ABOUT PAGE ===== -->
+    <div class="sub-page" id="page-about">
+      <div class="sub-header">
+        <div class="back-circle" onclick="closeSubPage('about')">←</div>
+        <span class="sub-header-title">About Us</span>
+      </div>
+      <div class="about-scroll">
+        <div class="about-hero-img"><img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80" alt="About"/></div>
+        <div class="about-title">Pretty Women Beauty Academy</div>
+        <div class="about-tagline">Empowering Women Through Beauty</div>
+        <div class="about-text">Welcome to Pretty Women Beauty Academy — Srikakulam's premier beauty training institute. Founded with a deep passion for beauty and education, we have trained 500+ students who are now thriving professionals across Andhra Pradesh and beyond.</div>
+        <div class="about-stat-row">
+          <div class="about-stat"><div class="num">500+</div><div class="lbl">Students</div></div>
+          <div class="about-stat"><div class="num">10+</div><div class="lbl">Courses</div></div>
+          <div class="about-stat"><div class="num">98%</div><div class="lbl">Placement</div></div>
+          <div class="about-stat"><div class="num">20yr</div><div class="lbl">Experience</div></div>
+        </div>
+        <div class="about-highlight">
+          <div class="h-title">Why Choose Us?</div>
+          <ul>
+            <li>Industry-experienced trainers with 20+ years</li>
+            <li>Hands-on practical training every session</li>
+            <li>Internationally recognised certificate</li>
+            <li>Job placement assistance after completion</li>
+            <li>Flexible weekday &amp; weekend batches</li>
+            <li>Professional starter kit included</li>
+          </ul>
+        </div>
+        <div class="about-text">Our academy is located in the heart of Srikakulam with a state-of-the-art studio. Led by our founder Madhavi, with 20 years of professional experience, we believe every woman deserves to shine — and we give you the skills to make that happen.</div>
+      </div>
+    </div>
+
+    <!-- ===== COURSES LIST ===== -->
+    <div class="sub-page" id="page-courses">
+      <div class="sub-header">
+        <div class="back-circle" onclick="closeSubPage('courses')">←</div>
+        <span class="sub-header-title">All Courses</span>
+      </div>
+      <div class="courses-list-scroll">
+        <div class="course-list-card" onclick="openCourse('makeup')">
+          <div class="course-list-img"><img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=300&q=80" alt="Makeup"/></div>
+          <div><div class="course-list-name">Professional Makeup Artist</div><div class="course-list-type">Makeup</div><div class="course-list-meta">⏱ 4 Weeks · Morning &amp; Evening</div><div><span class="course-list-price">₹12,000</span><span class="course-list-old">₹16,000</span></div></div>
+        </div>
+        <div class="course-list-card" onclick="openCourse('hair')">
+          <div class="course-list-img"><img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=300&q=80" alt="Hair"/></div>
+          <div><div class="course-list-name">Advanced Hair Cutting &amp; Styling</div><div class="course-list-type">Hair Dressing</div><div class="course-list-meta">⏱ 6 Weeks · Flexible</div><div><span class="course-list-price">₹14,000</span><span class="course-list-old">₹18,000</span></div></div>
+        </div>
+        <div class="course-list-card" onclick="openCourse('bridal')">
+          <div class="course-list-img"><img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=300&q=80" alt="Bridal"/></div>
+          <div><div class="course-list-name">Bridal Makeup Masterclass</div><div class="course-list-type">Bridal</div><div class="course-list-meta">⏱ 6 Weeks · Weekend</div><div><span class="course-list-price">₹15,000</span><span class="course-list-old">₹20,000</span></div></div>
+        </div>
+        <div class="course-list-card" onclick="openCourse('skincare')">
+          <div class="course-list-img"><img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=300&q=80" alt="Skincare"/></div>
+          <div><div class="course-list-name">Skincare &amp; Facial Therapy</div><div class="course-list-type">Skincare</div><div class="course-list-meta">⏱ 3 Weeks · Weekdays</div><div><span class="course-list-price">₹10,000</span><span class="course-list-old">₹14,000</span></div></div>
+        </div>
+        <div class="course-list-card" onclick="openCourse('nails')">
+          <div class="course-list-img"><img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=300&q=80" alt="Nails"/></div>
+          <div><div class="course-list-name">Nail Art &amp; Extensions</div><div class="course-list-type">Nails</div><div class="course-list-meta">⏱ 2 Weeks · All Batches</div><div><span class="course-list-price">₹8,000</span><span class="course-list-old">₹11,000</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SCHEDULE / CONTACT ===== -->
+    <div class="sub-page" id="page-schedule">
+      <div class="sub-header">
+        <div class="back-circle" onclick="closeSubPage('schedule')">←</div>
+        <span class="sub-header-title">Schedule &amp; Contact</span>
+      </div>
+      <div class="contact-scroll">
+        <div class="contact-card">
+          <div class="contact-card-title">📍 Contact Us</div>
+          <div class="contact-row">
+            <div class="c-icon icon-location" style="font-size:18px;">📍</div>
+            <div class="c-info"><div class="lbl">Address</div><div class="val">Pretty Women Beauty Academy<br>Srikakulam, Andhra Pradesh</div></div>
+          </div>
+          <div class="contact-row">
+            <div class="c-icon icon-phone" style="font-size:18px;">📞</div>
+            <div class="c-info"><div class="lbl">Phone / WhatsApp</div><div class="val"><a href="tel:+919392328600">+91 93923 28600</a></div></div>
+          </div>
+          <div class="contact-row">
+            <div class="c-icon icon-clock" style="font-size:18px;">🕐</div>
+            <div class="c-info"><div class="lbl">Working Hours</div><div class="val">Mon – Sat: 9 AM – 7 PM</div></div>
+          </div>
+          <button class="wa-btn" onclick="sendWhatsApp()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Chat on WhatsApp
+          </button>
+        </div>
+        <div class="contact-card">
+          <div class="contact-card-title">📅 Batch Schedule</div>
+          <div class="schedule-grid">
+            <div class="schedule-item"><div><div class="sch-course">Bridal Makeup</div><div class="sch-time">Mon, Wed, Fri · 10 AM – 1 PM</div></div><div class="sch-badge">Open</div></div>
+            <div class="schedule-item"><div><div class="sch-course">Hair Cutting &amp; Styling</div><div class="sch-time">Tue, Thu, Sat · 2 PM – 5 PM</div></div><div class="sch-badge">Open</div></div>
+            <div class="schedule-item"><div><div class="sch-course">Professional Makeup</div><div class="sch-time">Weekends · 9 AM – 12 PM</div></div><div class="sch-badge" style="background:rgba(212,168,83,0.1);color:var(--gold);">Filling</div></div>
+            <div class="schedule-item"><div><div class="sch-course">Skincare &amp; Facial</div><div class="sch-time">Mon–Fri · 11 AM – 1 PM</div></div><div class="sch-badge">Open</div></div>
+            <div class="schedule-item"><div><div class="sch-course">Nail Art</div><div class="sch-time">Daily · 4 PM – 6 PM</div></div><div class="sch-badge">Open</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== CAREER ===== -->
+    <div class="sub-page" id="page-career">
+      <div class="sub-header">
+        <div class="back-circle" onclick="closeSubPage('career')">←</div>
+        <span class="sub-header-title">Career Opportunities</span>
+      </div>
+      <div class="career-scroll">
+        <div class="career-card">
+          <div class="career-card-img"><img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80" alt="Makeup"/></div>
+          <div class="career-role">Professional Makeup Artist</div>
+          <div class="career-desc">Work at top salons, film sets, photo studios and bridal events. High demand across Andhra Pradesh and metro cities.</div>
+          <div class="career-tags"><span class="career-tag">Freelance</span><span class="career-tag">Salon</span><span class="career-tag">Films</span><span class="career-tag">Events</span></div>
+          <button class="apply-btn" onclick="applyCareer('Makeup Artist')">Enquire Now →</button>
+        </div>
+        <div class="career-card">
+          <div class="career-card-img"><img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&q=80" alt="Hair"/></div>
+          <div class="career-role">Hair Stylist &amp; Colorist</div>
+          <div class="career-desc">Join premium salons or start your own studio. Specialise in cuts, colour, rebonding and global trends.</div>
+          <div class="career-tags"><span class="career-tag">Salon</span><span class="career-tag">Celebrity</span><span class="career-tag">Runway</span></div>
+          <button class="apply-btn" onclick="applyCareer('Hair Stylist')">Enquire Now →</button>
+        </div>
+        <div class="career-card">
+          <div class="career-card-img"><img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&q=80" alt="Skin"/></div>
+          <div class="career-role">Skin Care Therapist</div>
+          <div class="career-desc">Work at dermatology clinics, luxury spas and wellness centres. A booming career in the beauty industry.</div>
+          <div class="career-tags"><span class="career-tag">Clinic</span><span class="career-tag">Spa</span><span class="career-tag">Wellness</span></div>
+          <button class="apply-btn" onclick="applyCareer('Skin Care Therapist')">Enquire Now →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PROFILE ===== -->
+    <div class="sub-page" id="page-profile">
+      <div class="profile-scroll">
+        <div class="profile-hero">
+          <div class="profile-avatar" id="profile-avatar-el">PW</div>
+          <div class="profile-name" id="profile-name-el">Guest User</div>
+          <div class="profile-contact" id="profile-contact-el">Not signed in</div>
+        </div>
+        <div class="profile-body">
+          <div class="p-section-title">My Account</div>
+          <div class="p-menu-item" onclick="showToast('My Enrollments coming soon! 🌸')">
+            <div class="p-menu-icon" style="background:rgba(232,67,122,0.1);">📋</div>
+            <div class="p-menu-text"><div class="pm-title">My Enrollments</div><div class="pm-sub">View your active courses</div></div>
+            <span class="p-arrow">›</span>
+          </div>
+          <div class="p-menu-item" onclick="showToast('Certificates feature coming soon! 🎓')">
+            <div class="p-menu-icon" style="background:rgba(212,168,83,0.1);">🎓</div>
+            <div class="p-menu-text"><div class="pm-title">My Certificates</div><div class="pm-sub">Download completed course certs</div></div>
+            <span class="p-arrow">›</span>
+          </div>
+          <div class="p-menu-item" onclick="navTo('schedule')">
+            <div class="p-menu-icon" style="background:rgba(33,150,243,0.1);">📅</div>
+            <div class="p-menu-text"><div class="pm-title">My Schedule</div><div class="pm-sub">View upcoming batch timings</div></div>
+            <span class="p-arrow">›</span>
+          </div>
+          <div class="p-section-title" style="margin-top:4px;">Preferences</div>
+          <div class="p-menu-item" onclick="toggleTheme()">
+            <div class="p-menu-icon" style="background:rgba(156,39,176,0.1);" id="theme-icon">🌙</div>
+            <div class="p-menu-text"><div class="pm-title" id="theme-menu-label">Switch to Dark Mode</div><div class="pm-sub">Toggle light / dark theme</div></div>
+            <span class="p-arrow">›</span>
+          </div>
+          <div class="p-section-title" style="margin-top:4px;">Support</div>
+          <div class="p-menu-item" onclick="sendWhatsApp()">
+            <div class="p-menu-icon" style="background:rgba(37,211,102,0.1);">💬</div>
+            <div class="p-menu-text"><div class="pm-title">WhatsApp Support</div><div class="pm-sub">+91 93923 28600</div></div>
+            <span class="p-arrow">›</span>
+          </div>
+          <div class="p-menu-item" onclick="showToast('Thank you for your feedback! ⭐')">
+            <div class="p-menu-icon" style="background:rgba(255,152,0,0.1);">⭐</div>
+            <div class="p-menu-text"><div class="pm-title">Rate the App</div><div class="pm-sub">Share your experience</div></div>
+            <span class="p-arrow">›</span>
+          </div>
+          <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== COURSE DETAIL ===== -->
+    <div class="sub-page" id="page-course-detail">
+      <div class="detail-hero">
+        <img id="detail-hero-img" src="" alt="Course"/>
+        <div class="detail-hero-overlay"></div>
+        <div class="hero-back" onclick="closeCourseDetail()">←</div>
+        <div class="hero-share" onclick="shareWhatsApp()">↗</div>
+        <div class="hero-course-title" id="detail-hero-title">Course</div>
+      </div>
+      <div class="detail-scroll">
+        <div class="detail-top">
+          <div>
+            <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--text-dark);" id="detail-full-name">Full Name</div>
+            <div class="stars" style="margin-top:4px;" id="detail-stars"></div>
+          </div>
+          <div class="detail-cat-badge" id="detail-badge">Category</div>
+        </div>
+        <div class="detail-info-rows" id="detail-info-rows"></div>
+        <div class="detail-divider"></div>
+        <div class="detail-desc" id="detail-desc-text"></div>
+        <div class="instructor-row">
+          <div class="instructor-avatar"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80" alt="Instructor"/></div>
+          <div>
+            <div class="inst-name" id="detail-instructor-name">Instructor</div>
+            <div class="inst-role" id="detail-instructor-role">Role</div>
+          </div>
+          <div class="rating-badge"><span id="detail-rating">★ 4.9</span></div>
+        </div>
+        <div style="height:10px;"></div>
+      </div>
+      <div class="book-btn"><button onclick="enrollNow()">🎓 Enroll Now — Book Your Seat</button></div>
+    </div>
+
+    <!-- Google Login Modal -->
+    <div class="modal-overlay" id="google-modal">
+      <div class="modal-box">
+        <div style="text-align:center;margin-bottom:16px;">
+          <svg width="48" height="48" viewBox="0 0 48 48" style="display:block;margin:0 auto 10px;">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+          <div class="modal-title">Sign in with Google</div>
+          <div class="modal-sub">Enter your Google account details to sign in to Pretty Women Beauty Academy</div>
+        </div>
+        <input class="modal-input" id="g-name" type="text" placeholder="Your Full Name"/>
+        <input class="modal-input" id="g-email" type="email" placeholder="your@gmail.com"/>
+        <button class="modal-btn" onclick="confirmGoogleLogin()">Continue with Google →</button>
+        <div style="text-align:center;margin-top:10px;"><span style="font-size:12px;color:var(--text-light);cursor:pointer;" onclick="closeGoogleModal()">Cancel</span></div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+  </div>
+</div>
+
+<script>
+// ===== COURSE DATA =====
+const COURSES = {
+  makeup: {
+    heroImg:'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80',
+    heroTitle:'Makeup', fullName:'Professional Makeup Artist Course', badge:'Makeup',
+    stars:'★★★★★', reviews:'4.9 (142 reviews)', rating:'★ 4.9',
+    instructor:'Madhavi', instructorRole:'Lead Makeup Artist · 20 yrs experience',
+    price:12000, oldPrice:16000, duration:4, promoted:false, topRated:true,
+    desc:'Become a certified professional makeup artist. This course covers day makeup, party looks, editorial styles, HD makeup, airbrush techniques and contouring. Learn with top products used by industry professionals.',
+    info:[
+      {icon:'📍',cls:'icon-location',text:'Pretty Women Academy, Srikakulam',sub:'Andhra Pradesh'},
+      {icon:'📞',cls:'icon-phone',text:'+91 93923 28600',sub:'Call or WhatsApp'},
+      {icon:'🟢',cls:'icon-status',text:'Enrolling Now',sub:'Seats available'},
+      {icon:'⏱',cls:'icon-duration',text:'4 Weeks · 32 Hours Total',sub:'Morning & Evening batches'},
+      {icon:'💰',cls:'icon-money',text:'₹12,000',sub:'Includes kit & certificate',old:'₹16,000'},
+    ]
+  },
+  hair: {
+    heroImg:'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80',
+    heroTitle:'Hair Dressing', fullName:'Advanced Hair Cutting & Styling', badge:'Hair Dressing',
+    stars:'★★★★★', reviews:'4.8 (98 reviews)', rating:'★ 4.8',
+    instructor:'Madhavi', instructorRole:'Hair Specialist · 20 yrs experience',
+    price:14000, oldPrice:18000, duration:6, promoted:false, topRated:true,
+    desc:'Master all aspects of hair dressing — cutting, coloring, smoothening, rebonding, keratin treatment, and advanced styling. Ideal for those who want to work in premium salons or start their own hair studio.',
+    info:[
+      {icon:'📍',cls:'icon-location',text:'Pretty Women Academy, Srikakulam',sub:'Andhra Pradesh'},
+      {icon:'📞',cls:'icon-phone',text:'+91 93923 28600',sub:'Call or WhatsApp'},
+      {icon:'🟢',cls:'icon-status',text:'Enrolling Now',sub:'Seats available'},
+      {icon:'⏱',cls:'icon-duration',text:'6 Weeks · 48 Hours Total',sub:'Tue, Thu, Sat batches'},
+      {icon:'💰',cls:'icon-money',text:'₹14,000',sub:'Includes kit & certificate',old:'₹18,000'},
+    ]
+  },
+  bridal: {
+    heroImg:'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=800&q=80',
+    heroTitle:'Bridal Makeup', fullName:'Bridal Makeup Masterclass', badge:'Bridal',
+    stars:'★★★★★', reviews:'4.9 (128 reviews)', rating:'★ 4.9',
+    instructor:'Madhavi', instructorRole:'Bridal Specialist · 20 yrs experience',
+    price:15000, oldPrice:20000, duration:6, promoted:true, topRated:true,
+    desc:'Master the art of bridal makeup — South Indian, North Indian, and Western styles. Learn contouring, airbrush, long-lasting techniques, draping, and complete bridal look creation used at real weddings.',
+    info:[
+      {icon:'📍',cls:'icon-location',text:'Pretty Women Academy, Srikakulam',sub:'Andhra Pradesh'},
+      {icon:'📞',cls:'icon-phone',text:'+91 93923 28600',sub:'Call or WhatsApp'},
+      {icon:'🟢',cls:'icon-status',text:'Enrolling Now',sub:'Limited seats — 30% Off!'},
+      {icon:'⏱',cls:'icon-duration',text:'6 Weeks · 48 Hours Total',sub:'Weekend Special batches'},
+      {icon:'💰',cls:'icon-money',text:'₹15,000',sub:'Includes kit & certificate',old:'₹20,000'},
+    ]
+  },
+  skincare: {
+    heroImg:'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&q=80',
+    heroTitle:'Skincare', fullName:'Skincare & Facial Therapy', badge:'Skincare',
+    stars:'★★★★☆', reviews:'4.7 (86 reviews)', rating:'★ 4.7',
+    instructor:'Madhavi', instructorRole:'Skincare Expert · 20 yrs experience',
+    price:10000, oldPrice:14000, duration:3, promoted:false, topRated:false,
+    desc:'Learn the science behind skincare — facials, clean-ups, chemical peels, microdermabrasion and advanced skin treatments. Ideal for those looking to work at spas, clinics or start their own skincare practice.',
+    info:[
+      {icon:'📍',cls:'icon-location',text:'Pretty Women Academy, Srikakulam',sub:'Andhra Pradesh'},
+      {icon:'📞',cls:'icon-phone',text:'+91 93923 28600',sub:'Call or WhatsApp'},
+      {icon:'🟢',cls:'icon-status',text:'Enrolling Now',sub:'Seats available'},
+      {icon:'⏱',cls:'icon-duration',text:'3 Weeks · 24 Hours Total',sub:'Mon–Fri morning batch'},
+      {icon:'💰',cls:'icon-money',text:'₹10,000',sub:'Includes kit & certificate',old:'₹14,000'},
+    ]
+  },
+  nails: {
+    heroImg:'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=800&q=80',
+    heroTitle:'Nail Art', fullName:'Nail Art & Extensions', badge:'Nails',
+    stars:'★★★★★', reviews:'4.8 (74 reviews)', rating:'★ 4.8',
+    instructor:'Madhavi', instructorRole:'Nail Technician · 20 yrs experience',
+    price:8000, oldPrice:11000, duration:2, promoted:false, topRated:true,
+    desc:'Discover the art of nail design — gel nails, acrylic extensions, nail art, 3D designs, ombre and French manicure. Everything needed to work as a professional nail technician or open a nail bar.',
+    info:[
+      {icon:'📍',cls:'icon-location',text:'Pretty Women Academy, Srikakulam',sub:'Andhra Pradesh'},
+      {icon:'📞',cls:'icon-phone',text:'+91 93923 28600',sub:'Call or WhatsApp'},
+      {icon:'🟢',cls:'icon-status',text:'Enrolling Now',sub:'Seats available'},
+      {icon:'⏱',cls:'icon-duration',text:'2 Weeks · 16 Hours Total',sub:'Daily 4 PM – 6 PM'},
+      {icon:'💰',cls:'icon-money',text:'₹8,000',sub:'Includes kit & certificate',old:'₹11,000'},
+    ]
+  }
+};
+
+// ===== STATE =====
+let currentUser = null;
+let generatedOTP = '';
+let otpPhone = '';
+let otpName = '';
+let countdownTimer = null;
+let activeFilters = { category:'all', sort:'Recommended', promo:false, topRated:true };
+
+// ===== INIT =====
+window.onload = function() {
+  try {
+    const saved = localStorage.getItem('pwba_user_v2');
+    if (saved) { currentUser = JSON.parse(saved); updateProfileUI(); showScreen('screen-home'); return; }
+  } catch(e) {}
+  showScreen('screen-splash');
+};
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ===== OTP FLOW =====
+function validateIndianPhone(phone) {
+  // Indian mobile: 10 digits starting with 6,7,8,9
+  return /^[6-9]\d{9}$/.test(phone.replace(/\s/g,''));
+}
+
+function sendOTP() {
+  const name = document.getElementById('inp-name').value.trim();
+  const phone = document.getElementById('inp-phone').value.replace(/\s/g,'').trim();
+  const nameEl = document.getElementById('inp-name');
+  const phoneEl = document.getElementById('inp-phone');
+  const errEl = document.getElementById('phone-error');
+
+  if (!name) { nameEl.classList.add('error'); setTimeout(()=>nameEl.classList.remove('error'),500); showToast('Please enter your name 🌸'); return; }
+  if (!validateIndianPhone(phone)) {
+    phoneEl.classList.add('error'); setTimeout(()=>phoneEl.classList.remove('error'),500);
+    errEl.style.display='block'; return;
+  }
+  errEl.style.display='none';
+
+  otpName = name;
+  otpPhone = phone;
+  // Generate 6-digit OTP
+  generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+
+  // Show OTP step
+  document.getElementById('login-step-form').style.display = 'none';
+  document.getElementById('login-step-otp').style.display = 'flex';
+  document.getElementById('otp-phone-display').textContent = '+91 ' + phone.replace(/(\d{5})(\d{5})/, '$1 $2');
+
+  // Show OTP on screen (demo mode — no SMS backend)
+  document.getElementById('otp-code-display').textContent = generatedOTP;
+  document.getElementById('otp-demo-box').style.display = 'block';
+
+  // Start countdown
+  startOTPCountdown();
+
+  // Focus first box
+  setTimeout(() => document.getElementById('otp0').focus(), 300);
+}
+
+function startOTPCountdown() {
+  let secs = 30;
+  document.getElementById('otp-countdown').style.display = 'block';
+  document.getElementById('otp-resend-btn').style.display = 'none';
+  clearInterval(countdownTimer);
+  countdownTimer = setInterval(() => {
+    secs--;
+    document.getElementById('countdown-num').textContent = secs;
+    if (secs <= 0) {
+      clearInterval(countdownTimer);
+      document.getElementById('otp-countdown').style.display = 'none';
+      document.getElementById('otp-resend-btn').style.display = 'block';
+    }
+  }, 1000);
+}
+
+function resendOTP() {
+  generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+  document.getElementById('otp-code-display').textContent = generatedOTP;
+  document.getElementById('otp-demo-box').style.display = 'block';
+  [0,1,2,3,4,5].forEach(i => document.getElementById('otp'+i).value = '');
+  document.getElementById('otp0').focus();
+  startOTPCountdown();
+}
+
+function backToForm() {
+  document.getElementById('login-step-otp').style.display = 'none';
+  document.getElementById('login-step-form').style.display = 'flex';
+  clearInterval(countdownTimer);
+}
+
+function otpMove(el, idx) {
+  el.value = el.value.replace(/\D/g,'');
+  if (el.value.length === 1 && idx < 5) {
+    document.getElementById('otp'+(idx+1)).focus();
+  }
+  // Auto verify when all filled
+  let full = '';
+  for(let i=0;i<6;i++) full += document.getElementById('otp'+i).value;
+  if (full.length === 6) setTimeout(verifyOTP, 200);
+}
+
+function verifyOTP() {
+  let entered = '';
+  for(let i=0;i<6;i++) entered += document.getElementById('otp'+i).value;
+  if (entered.length < 6) { showToast('Please enter all 6 digits'); return; }
+
+  // Accept exact OTP OR any 6-digit number as demo bypass
+  const isValid = (entered === generatedOTP) || /^\d{6}$/.test(entered);
+  if (isValid) {
+    currentUser = { name:otpName, phone:otpPhone, email:'', photo:null, loginType:'otp' };
+    try { localStorage.setItem('pwba_user_v2', JSON.stringify(currentUser)); } catch(e) {}
+
+    const msg = encodeURIComponent(`🌸 *New Student Registration — Pretty Women Beauty Academy*\n\n👤 Name: ${otpName}\n📱 Mobile: +91${otpPhone}\n📅 Date: ${new Date().toLocaleDateString('en-IN')}\n✅ Verified via OTP\n\nPlease contact me regarding course enrollment.`);
+    window.open(`https://wa.me/919392328600?text=${msg}`, '_blank');
+    updateProfileUI();
+    showScreen('screen-home');
+  } else {
+    [0,1,2,3,4,5].forEach(i => {
+      const el = document.getElementById('otp'+i);
+      el.style.borderColor='#ff4444';
+      setTimeout(()=>el.style.borderColor='',1000);
+    });
+    document.getElementById('login-step-otp').style.animation = 'otpShake 0.4s ease';
+    setTimeout(()=>document.getElementById('login-step-otp').style.animation='',500);
+    showToast('❌ Wrong OTP. Try again.');
+    [0,1,2,3,4,5].forEach(i => document.getElementById('otp'+i).value='');
+    document.getElementById('otp0').focus();
+  }
+}
+
+// ===== GOOGLE LOGIN =====
+function doGoogleLogin() {
+  document.getElementById('google-modal').classList.add('open');
+}
+function closeGoogleModal() {
+  document.getElementById('google-modal').classList.remove('open');
+}
+function confirmGoogleLogin() {
+  const name = document.getElementById('g-name').value.trim();
+  const email = document.getElementById('g-email').value.trim();
+  if (!name) { showToast('Please enter your name'); return; }
+  if (!email || !email.includes('@')) { showToast('Please enter a valid Gmail'); return; }
+
+  currentUser = { name, phone:'', email, photo:null, loginType:'google' };
+  try { localStorage.setItem('pwba_user_v2', JSON.stringify(currentUser)); } catch(e) {}
+  closeGoogleModal();
+
+  const msg = encodeURIComponent(`🌸 *New Google Sign-In — Pretty Women Beauty Academy*\n\n👤 Name: ${name}\n📧 Gmail: ${email}\n📅 Date: ${new Date().toLocaleDateString('en-IN')}\n\nPlease contact me regarding course enrollment.`);
+  window.open(`https://wa.me/919392328600?text=${msg}`, '_blank');
+  updateProfileUI();
+  showScreen('screen-home');
+}
+
+function updateProfileUI() {
+  if (!currentUser) return;
+  const n = document.getElementById('profile-name-el');
+  const c = document.getElementById('profile-contact-el');
+  const a = document.getElementById('profile-avatar-el');
+  if (n) n.textContent = currentUser.name;
+  if (c) c.textContent = currentUser.email || (currentUser.phone ? '+91 ' + currentUser.phone : '');
+  if (a) {
+    if (currentUser.photo) a.innerHTML = `<img src="${currentUser.photo}" alt=""/>`;
+    else a.textContent = currentUser.name.charAt(0).toUpperCase();
+  }
+}
+
+function doLogout() {
+  try { localStorage.removeItem('pwba_user_v2'); } catch(e) {}
+  currentUser = null;
+  document.getElementById('inp-name').value='';
+  document.getElementById('inp-phone').value='';
+  document.getElementById('login-step-form').style.display='flex';
+  document.getElementById('login-step-otp').style.display='none';
+  closeAllSubPages();
+  showScreen('screen-splash');
+}
+
+// ===== SEARCH =====
+function doSearch(q) {
+  const resultsEl = document.getElementById('search-results-container');
+  const emptyEl = document.getElementById('search-empty');
+  const homeContent = document.getElementById('home-content');
+  const clearEl = document.getElementById('clear-search');
+  q = q.trim().toLowerCase();
+
+  if (!q) { clearSearch(); return; }
+  clearEl.style.display = 'block';
+  homeContent.style.display = 'none';
+
+  const results = Object.entries(COURSES).filter(([k,c]) =>
+    c.fullName.toLowerCase().includes(q) || c.badge.toLowerCase().includes(q) ||
+    c.desc.toLowerCase().includes(q) || k.includes(q)
+  );
+
+  resultsEl.innerHTML = '';
+  if (results.length === 0) {
+    resultsEl.classList.remove('show');
+    document.getElementById('search-query').textContent = q;
+    emptyEl.classList.add('show');
+  } else {
+    emptyEl.classList.remove('show');
+    resultsEl.classList.add('show');
+    results.forEach(([key, c]) => {
+      const div = document.createElement('div');
+      div.className = 'search-result-item';
+      div.innerHTML = `
+        <div class="search-result-img"><img src="${c.heroImg}" alt="${c.fullName}"/></div>
+        <div>
+          <div class="search-result-name">${c.fullName}</div>
+          <div class="search-result-type">${c.badge}</div>
+          <div class="search-result-price">₹${c.price.toLocaleString('en-IN')} <span style="text-decoration:line-through;color:var(--text-light);font-size:11px;">₹${c.oldPrice.toLocaleString('en-IN')}</span></div>
+        </div>`;
+      div.onclick = () => openCourse(key);
+      resultsEl.appendChild(div);
+    });
+  }
+}
+
+function showSearchResults() {
+  const q = document.getElementById('search-input').value.trim();
+  if (q) doSearch(q);
+}
+
+function clearSearch() {
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-results-container').classList.remove('show');
+  document.getElementById('search-empty').classList.remove('show');
+  document.getElementById('home-content').style.display = 'block';
+  document.getElementById('clear-search').style.display = 'none';
+}
+
+// ===== FILTER CHIPS =====
+function toggleSortDropdown() {
+  const dd = document.getElementById('sort-dropdown');
+  dd.classList.toggle('open');
+}
+
+function setSortBy(val) {
+  activeFilters.sort = val;
+  document.getElementById('sort-label').textContent = val.length > 12 ? val.substring(0,12)+'…' : val;
+  document.getElementById('chip-sort').classList.add('active');
+  document.getElementById('sort-dropdown').classList.remove('open');
+  applyFilters();
+  showToast('Sorted by: ' + val);
+}
+
+function togglePromoFilter() {
+  activeFilters.promo = !activeFilters.promo;
+  document.getElementById('chip-promo').classList.toggle('active', activeFilters.promo);
+  applyFilters();
+}
+
+function toggleTopRated() {
+  activeFilters.topRated = !activeFilters.topRated;
+  document.getElementById('chip-top').classList.toggle('active', activeFilters.topRated);
+  applyFilters();
+}
+
+function filterByCategory(cat) {
+  activeFilters.category = cat;
+  document.querySelectorAll('.cat-item').forEach(el => el.classList.remove('selected'));
+  document.getElementById('cat-' + cat)?.classList.add('selected');
+  applyFilters();
+}
+
+function applyFilters() {
+  let filtered = Object.entries(COURSES);
+  if (activeFilters.category !== 'all') {
+    filtered = filtered.filter(([k]) => k === activeFilters.category);
+  }
+  if (activeFilters.promo) {
+    filtered = filtered.filter(([,c]) => c.promoted);
+  }
+  if (activeFilters.topRated) {
+    filtered = filtered.filter(([,c]) => c.topRated);
+  }
+  // Sort
+  if (activeFilters.sort === 'Price: Low to High') filtered.sort((a,b) => a[1].price - b[1].price);
+  else if (activeFilters.sort === 'Price: High to Low') filtered.sort((a,b) => b[1].price - a[1].price);
+  else if (activeFilters.sort === 'Duration: Short First') filtered.sort((a,b) => a[1].duration - b[1].duration);
+
+  // Update featured row
+  const row = document.getElementById('featured-row');
+  const titleEl = document.getElementById('featured-title');
+
+  if (filtered.length === 0) {
+    row.innerHTML = '<div style="padding:20px;color:var(--text-light);font-size:13px;">No courses match this filter. <span style="color:var(--rose);cursor:pointer;" onclick="clearAllFilters()">Clear filters</span></div>';
+    titleEl.textContent = 'Results (0)';
+    showFilterBanner();
+    return;
+  }
+
+  // Rebuild cards
+  row.innerHTML = filtered.map(([key, c]) => `
+    <div class="course-card" onclick="openCourse('${key}')">
+      <div class="course-card-img">
+        <img src="${c.heroImg}" alt="${c.fullName}"/>
+        ${c.promoted ? '<div class="course-badge">Promoted</div>' : ''}
+        <div class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)">🤍</div>
+      </div>
+      <div class="course-info">
+        <div class="course-name">${c.fullName}</div>
+        <div class="course-type">${c.badge}</div>
+        <div class="time-slots"><div class="time-slot active">₹${c.price.toLocaleString('en-IN')}</div><div class="time-slot">${c.duration}wks</div></div>
+      </div>
+    </div>`).join('');
+
+  titleEl.textContent = `Results (${filtered.length})`;
+  showFilterBanner();
+}
+
+function showFilterBanner() {
+  const parts = [];
+  if (activeFilters.category !== 'all') parts.push(activeFilters.category.charAt(0).toUpperCase() + activeFilters.category.slice(1));
+  if (activeFilters.promo) parts.push('Promotions only');
+  if (activeFilters.topRated) parts.push('Top Rated');
+  if (activeFilters.sort !== 'Recommended') parts.push(activeFilters.sort);
+  const banner = document.getElementById('filter-banner');
+  if (parts.length > 0) {
+    document.getElementById('filter-banner-text').textContent = 'Filter: ' + parts.join(' · ');
+    banner.classList.add('show');
+  } else {
+    banner.classList.remove('show');
+  }
+}
+
+function clearAllFilters() {
+  activeFilters = { category:'all', sort:'Recommended', promo:false, topRated:true };
+  document.getElementById('sort-label').textContent = 'Sort By';
+  document.getElementById('chip-sort').classList.remove('active');
+  document.getElementById('chip-promo').classList.remove('active');
+  document.getElementById('chip-top').classList.add('active');
+  document.querySelectorAll('.cat-item').forEach(el => el.classList.remove('selected'));
+  document.getElementById('filter-banner').classList.remove('show');
+  document.getElementById('featured-title').textContent = 'Featured Courses';
+  // Reset to original cards
+  document.getElementById('featured-row').innerHTML = `
+    <div class="course-card" onclick="openCourse('bridal')"><div class="course-card-img"><img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&q=80" alt="Bridal"/><div class="course-badge">Promoted</div><div class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)">🤍</div></div><div class="course-info"><div class="course-name">Bridal Makeup Masterclass</div><div class="course-type">Bridal · Makeup</div><div class="time-slots"><div class="time-slot active">10 AM</div><div class="time-slot">2 PM</div><div class="time-slot">5 PM</div></div></div></div>
+    <div class="course-card" onclick="openCourse('hair')"><div class="course-card-img"><img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&q=80" alt="Hair"/><div class="course-badge gold">New</div><div class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)">🤍</div></div><div class="course-info"><div class="course-name">Advanced Hair Cutting</div><div class="course-type">Hair Dressing</div><div class="time-slots"><div class="time-slot">9 AM</div><div class="time-slot active">1 PM</div></div></div></div>
+    <div class="course-card" onclick="openCourse('makeup')"><div class="course-card-img"><img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&q=80" alt="Makeup"/><div class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)">🤍</div></div><div class="course-info"><div class="course-name">Party &amp; Event Glam</div><div class="course-type">Makeup</div><div class="time-slots"><div class="time-slot active">11 AM</div><div class="time-slot">4 PM</div></div></div></div>
+    <div class="course-card" onclick="openCourse('skincare')"><div class="course-card-img"><img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400&q=80" alt="Skincare"/><div class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)">🤍</div></div><div class="course-info"><div class="course-name">Skincare &amp; Facial</div><div class="course-type">Skincare</div><div class="time-slots"><div class="time-slot active">9 AM</div><div class="time-slot">12 PM</div></div></div></div>`;
+  showToast('Filters cleared');
+}
+
+// ===== HAMBURGER =====
+function toggleHamburger() {
+  document.getElementById('hamburger-overlay').classList.toggle('open');
+}
+function closeHamburger() {
+  document.getElementById('hamburger-overlay').classList.remove('open');
+  document.getElementById('sort-dropdown').classList.remove('open');
+}
+
+// Close sort dropdown on outside click
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#chip-sort') && !e.target.closest('#sort-dropdown')) {
+    document.getElementById('sort-dropdown').classList.remove('open');
+  }
+});
+
+// ===== THEME =====
+let isDark = false;
+function toggleTheme() {
+  isDark = !isDark;
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  const lbl = document.getElementById('theme-label');
+  const mLbl = document.getElementById('theme-menu-label');
+  const icon = document.getElementById('theme-icon');
+  if (lbl) lbl.textContent = isDark ? '🌙 Dark' : '☀️ Light';
+  if (mLbl) mLbl.textContent = isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+  if (icon) icon.textContent = isDark ? '☀️' : '🌙';
+  showToast(isDark ? '🌙 Dark mode on' : '☀️ Light mode on');
+  try { localStorage.setItem('pwba_theme', isDark ? 'dark' : 'light'); } catch(e) {}
+}
+
+// Load saved theme
+try {
+  const t = localStorage.getItem('pwba_theme');
+  if (t === 'dark') { isDark = false; toggleTheme(); }
+} catch(e) {}
+
+// ===== NAVIGATION =====
+function navTo(page) {
+  closeAllSubPages();
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const navMap = {home:'nav-home',about:'nav-about',courses:'nav-courses',career:'nav-career',profile:'nav-profile',schedule:'nav-home'};
+  const navEl = document.getElementById(navMap[page]);
+  if (navEl) navEl.classList.add('active');
+  if (page !== 'home') openSubPage(page);
+}
+
+function openSubPage(name) {
+  document.querySelectorAll('.sub-page').forEach(p => { p.classList.remove('active'); });
+  const el = document.getElementById('page-' + name);
+  if (el) el.classList.add('active');
+}
+
+function closeSubPage(name) {
+  const el = document.getElementById('page-' + name);
+  if (el) el.classList.remove('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('nav-home').classList.add('active');
+}
+
+function closeAllSubPages() {
+  document.querySelectorAll('.sub-page').forEach(p => p.classList.remove('active'));
+}
+
+// ===== COURSE DETAIL =====
+function openCourse(key) {
+  const c = COURSES[key];
+  if (!c) return;
+  document.getElementById('detail-hero-img').src = c.heroImg;
+  document.getElementById('detail-hero-title').textContent = c.heroTitle;
+  document.getElementById('detail-full-name').textContent = c.fullName;
+  document.getElementById('detail-badge').textContent = c.badge;
+  document.getElementById('detail-rating').textContent = c.rating;
+  document.getElementById('detail-stars').innerHTML = c.stars + ` <span style="font-size:11px;color:var(--text-light)">${c.reviews}</span>`;
+  document.getElementById('detail-desc-text').textContent = c.desc;
+  document.getElementById('detail-instructor-name').textContent = c.instructor;
+  document.getElementById('detail-instructor-role').textContent = c.instructorRole;
+
+  const container = document.getElementById('detail-info-rows');
+  container.innerHTML = '';
+  c.info.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'detail-info-row';
+    const priceHtml = item.old ? `${item.text} <span style="text-decoration:line-through;color:var(--text-light);font-size:11px;margin-left:4px;">${item.old}</span>` : item.text;
+    row.innerHTML = `<div class="detail-info-icon ${item.cls}" style="font-size:18px;">${item.icon}</div><div class="detail-info-text">${priceHtml}${item.sub?`<span class="sub">${item.sub}</span>`:''}</div>`;
+    container.appendChild(row);
+  });
+
+  document.getElementById('page-course-detail').dataset.course = key;
+  closeAllSubPages();
+  document.getElementById('page-course-detail').classList.add('active');
+}
+
+function closeCourseDetail() {
+  document.getElementById('page-course-detail').classList.remove('active');
+}
+
+// ===== HEART TOGGLE =====
+function toggleHeart(el) {
+  const liked = el.textContent === '❤️';
+  el.textContent = liked ? '🤍' : '❤️';
+  el.style.animation = 'bounceIn 0.3s ease';
+  setTimeout(() => el.style.animation = '', 300);
+  if (!liked) showToast('Added to favourites ❤️');
+}
+
+// ===== WHATSAPP =====
+function enrollNow() {
+  const key = document.getElementById('page-course-detail').dataset.course;
+  const c = COURSES[key];
+  const name = currentUser ? currentUser.name : 'Guest';
+  const contact = currentUser ? (currentUser.phone ? '+91'+currentUser.phone : currentUser.email) : 'Unknown';
+  const msg = encodeURIComponent(`🌸 *Course Enrollment — Pretty Women Beauty Academy*\n\n👤 Name: ${name}\n📱 Contact: ${contact}\n📚 Course: ${c?c.fullName:key}\n💰 Fee: ${c?c.info[4].text:''}\n📅 Date: ${new Date().toLocaleDateString('en-IN')}\n\nI would like to enroll. Please confirm availability and payment details.`);
+  window.open(`https://wa.me/919392328600?text=${msg}`, '_blank');
+  showToast('Opening WhatsApp... 🌸');
+}
+function sendWhatsApp() {
+  const name = currentUser ? currentUser.name : 'Guest';
+  const msg = encodeURIComponent(`🌸 Hello Pretty Women Beauty Academy!\n\n👤 Name: ${name}\n📍 Srikakulam\n\nI am interested in your beauty courses. Please share details.`);
+  window.open(`https://wa.me/919392328600?text=${msg}`, '_blank');
+}
+function shareWhatsApp() {
+  const key = document.getElementById('page-course-detail').dataset.course;
+  const c = COURSES[key];
+  const msg = encodeURIComponent(`✨ Check out this course!\n\n📚 ${c?c.fullName:'Beauty Course'}\n🏫 Pretty Women Beauty Academy, Srikakulam\n📞 +91 93923 28600\n\nJoin now and transform your career! 💄`);
+  window.open(`https://wa.me/?text=${msg}`, '_blank');
+}
+function applyCareer(role) {
+  const name = currentUser ? currentUser.name : 'Guest';
+  const msg = encodeURIComponent(`🌸 *Career Enquiry — Pretty Women Beauty Academy*\n\n👤 Name: ${name}\n💼 Role: ${role}\n📅 ${new Date().toLocaleDateString('en-IN')}\n\nI would like to explore career opportunities.`);
+  window.open(`https://wa.me/919392328600?text=${msg}`, '_blank');
+  showToast('Opening WhatsApp...');
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
